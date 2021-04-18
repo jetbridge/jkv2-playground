@@ -6,10 +6,10 @@ module.exports = {
     "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
       "identity-obj-proxy",
   },
-  roots: ["./src"],
+  roots: ["./packages"],
   globals: {
     "ts-jest": {
-      tsconfig: "tsconfig.json",
+      tsconfig: "tsconfig.base.json",
     },
   },
   testMatch: ["**/__tests__/**/*.+(ts|tsx)", "**/?(*.)+(spec|test).+(ts|tsx)"],

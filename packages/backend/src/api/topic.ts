@@ -1,9 +1,8 @@
-import { CrudApiBase, RegisterCrudApi } from "@jetkit/cdk";
-
+import { CrudApiBase, CrudApi, Route, SubRoute } from "@jetkit/cdk";
 import { Column, Entity } from "typeorm";
 import { BaseModel } from "demo-repo";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
-import { app } from "../app";
+// import { app } from ".dd./app";
 
 /**
  * Forum topic
@@ -14,10 +13,22 @@ export class Topic extends BaseModel {
   name: string;
 }
 
-@RegisterCrudApi(app, { model: Topic, route: "/topic", memorySize: 512 })
+@CrudApi({ model: Topic, route: "/topic", memorySize: 512 })
 export class TopicCrudApi extends CrudApiBase {
+  @SubRoute("/test")
+  async test() {
+    return "Testerino";
+  }
+
   post: APIGatewayProxyHandlerV2 = async () => "Posterino";
 }
+
+Route({ route: "/blargle" })(async function (event) {
+  return JSON.stringify({
+    message: "function route",
+    rawQueryString: event.rawQueryString,
+  });
+});
 
 export const handler: APIGatewayProxyHandlerV2 = async (event, context) =>
   new TopicCrudApi().dispatch(event, context);

@@ -1,7 +1,7 @@
 import { CorsHttpMethod, HttpApi } from "@aws-cdk/aws-apigatewayv2";
 import * as cdk from "@aws-cdk/core";
 import { CfnOutput, Construct, Duration } from "@aws-cdk/core";
-import { CrudApi, findCrudApiInRegistry, JetKitCdkApp } from "@jetkit/cdk";
+import { JetKitCdkApp, ResourceGeneratorConstruct } from "@jetkit/cdk";
 import { stackResources } from "demo-backend";
 
 export interface ICrudApisProps {
@@ -13,23 +13,11 @@ export class CrudApis extends Construct {
   constructor(scope: cdk.Construct, id: string, props: ICrudApisProps) {
     super(scope, id);
 
-    const { httpApi, app } = props;
+    const { httpApi } = props;
 
-    stackResources.forEach((crudApi) => {
-      const registryEntry = findCrudApiInRegistry(app, crudApi);
-      if (!registryEntry) {
-        throw new Error(
-          `Did not find ${crudApi} in route registry, did you define it with @RegisterCrudApi?`
-        );
-      }
-
-      const name = registryEntry.apiClass.name;
-
-      new CrudApi(this, name, {
-        httpApi,
-        path: registryEntry.route,
-        ...registryEntry,
-      });
+    new ResourceGeneratorConstruct(this, "Generator", {
+      resources: stackResources,
+      httpApi,
     });
 
     new CfnOutput(this, `BaseUrl`, {
