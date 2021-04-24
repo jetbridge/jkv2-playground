@@ -23,7 +23,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "@jetkit/cdk": "file:.yalc/@jetkit/cdk",
+    "@jetkit/cdk": "^0.0.14",
     "concurrently": "^5.3.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.25",

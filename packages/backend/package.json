@@ -25,7 +25,6 @@
   "author": "",
   "license": "",
   "dependencies": {
-    "@jetkit/cdk": "file:.yalc/@jetkit/cdk",
     "@lambda-middleware/class-validator": "^1.0.1",
     "@lambda-middleware/compose": "^1.2.0",
     "@lambda-middleware/http-error-handler": "^1.0.1",
