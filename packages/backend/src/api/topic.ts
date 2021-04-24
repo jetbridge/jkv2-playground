@@ -15,7 +15,12 @@ export class Topic extends BaseModel {
 @ApiView({
   path: "/topic",
   memorySize: 512,
-  bundling: { minify: true, sourceMap: true, metafile: true },
+  bundling: {
+    minify: true,
+    sourceMap: true,
+    metafile: true,
+    esbuildVersion: "0.11.14",
+  },
   // handler: "TopicCrudApi.dispatch",
 })
 export class TopicCrudApi extends ApiViewBase {
