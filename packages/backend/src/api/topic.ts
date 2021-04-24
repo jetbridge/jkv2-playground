@@ -2,7 +2,6 @@ import { APIEvent, ApiView, ApiViewBase, Route, SubRoute } from "@jetkit/cdk";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { BaseModel } from "demo-repo";
 import { Column, Entity } from "typeorm";
-// import { app } from ".dd./app";
 
 /**
  * Forum topic
@@ -16,6 +15,7 @@ export class Topic extends BaseModel {
 @ApiView({
   path: "/topic",
   memorySize: 512,
+  bundling: { minify: true, sourceMap: true, metafile: true },
   // handler: "TopicCrudApi.dispatch",
 })
 export class TopicCrudApi extends ApiViewBase {
@@ -38,6 +38,7 @@ export async function queryHandler(event: APIEvent) {
 Route({
   path: "/blargle",
   memorySize: 1024,
+  bundling: { minify: true, sourceMap: true },
 })(queryHandler);
 
 export const handler: APIGatewayProxyHandlerV2 = async (event, context) =>
