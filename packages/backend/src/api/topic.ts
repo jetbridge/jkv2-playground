@@ -1,7 +1,7 @@
-import { CrudApiView, CrudApi, Route, SubRoute, APIEvent } from "@jetkit/cdk";
-import { Column, Entity } from "typeorm";
-import { BaseModel } from "demo-repo";
+import { APIEvent, ApiView, ApiViewBase, Route, SubRoute } from "@jetkit/cdk";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
+import { BaseModel } from "demo-repo";
+import { Column, Entity } from "typeorm";
 // import { app } from ".dd./app";
 
 /**
@@ -13,13 +13,12 @@ export class Topic extends BaseModel {
   name: string;
 }
 
-@CrudApi({
-  model: Topic,
+@ApiView({
   path: "/topic",
   memorySize: 512,
   // handler: "TopicCrudApi.dispatch",
 })
-export class TopicCrudApi extends CrudApiView {
+export class TopicCrudApi extends ApiViewBase {
   @SubRoute({ path: "/test" })
   async test() {
     return "Testerino";
