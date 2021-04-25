@@ -23,7 +23,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "@jetkit/cdk": "^0.0.28",
+    "@jetkit/cdk": "^0.0.31",
     "concurrently": "^5.3.0",
     "typeorm": "^0.2.32"
   },

@@ -1,17 +1,17 @@
 import {
-  APIEvent,
+  ApiEvent,
   ApiView,
   ApiViewBase,
   BaseModel,
   Route,
   SubRoute,
+  apiViewHandler,
 } from "@jetkit/cdk";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import { Column, Entity } from "typeorm";
 
 const commonOpts = {
   memorySize: 512,
-  entry: __filename,
   bundling: {
     // target: "node14",
     minify: true,
@@ -19,7 +19,6 @@ const commonOpts = {
     target: "es2020",
     metafile: true,
     esbuildVersion: "0.11.14",
-    logLevel: "debug",
   },
 };
 
@@ -35,8 +34,7 @@ export class Topic extends BaseModel {
 @ApiView({
   path: "/topic",
   ...commonOpts,
-
-  // handler: "TopicCrudApi.dispatch",
+  handler: "TopicCrudApi.dispatch",
 })
 export class TopicCrudApi extends ApiViewBase {
   @SubRoute({ path: "/test" })
@@ -46,9 +44,9 @@ export class TopicCrudApi extends ApiViewBase {
 
   post: APIGatewayProxyHandlerV2 = async () => "Posterino";
 }
+export const handler = apiViewHandler(__filename, TopicCrudApi);
 
-// handler function
-export async function queryHandler(event: APIEvent) {
+export async function queryHandler(event: ApiEvent) {
   return JSON.stringify({
     message: "function route",
     rawQueryString: event.rawQueryString,
@@ -59,6 +57,3 @@ Route({
   path: "/blargle",
   ...commonOpts,
 })(queryHandler);
-
-export const handler: APIGatewayProxyHandlerV2 = async (event, context) =>
-  new TopicCrudApi().dispatch(event, context);
