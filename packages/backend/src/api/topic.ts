@@ -1,8 +1,26 @@
-import { CrudApiView, CrudApi, Route, SubRoute, APIEvent } from "@jetkit/cdk";
-import { Column, Entity } from "typeorm";
-import { BaseModel } from "demo-repo";
+import {
+  ApiEvent,
+  ApiView,
+  ApiViewBase,
+  BaseModel,
+  Route,
+  SubRoute,
+  apiViewHandler,
+} from "@jetkit/cdk";
 import { APIGatewayProxyHandlerV2 } from "aws-lambda";
-// import { app } from ".dd./app";
+import { Column, Entity } from "typeorm";
+
+const commonOpts = {
+  memorySize: 512,
+  bundling: {
+    // target: "node14",
+    minify: true,
+    // sourceMap: true,
+    target: "es2020",
+    metafile: true,
+    esbuildVersion: "0.11.14",
+  },
+};
 
 /**
  * Forum topic
@@ -13,13 +31,12 @@ export class Topic extends BaseModel {
   name: string;
 }
 
-@CrudApi({
-  model: Topic,
+@ApiView({
   path: "/topic",
-  memorySize: 512,
-  // handler: "TopicCrudApi.dispatch",
+  ...commonOpts,
+  handler: "TopicCrudApi.dispatch",
 })
-export class TopicCrudApi extends CrudApiView {
+export class TopicCrudApi extends ApiViewBase {
   @SubRoute({ path: "/test" })
   async test() {
     return "Testerino";
@@ -27,9 +44,9 @@ export class TopicCrudApi extends CrudApiView {
 
   post: APIGatewayProxyHandlerV2 = async () => "Posterino";
 }
+export const handler = apiViewHandler(__filename, TopicCrudApi);
 
-// handler function
-export async function queryHandler(event: APIEvent) {
+export async function queryHandler(event: ApiEvent) {
   return JSON.stringify({
     message: "function route",
     rawQueryString: event.rawQueryString,
@@ -38,8 +55,5 @@ export async function queryHandler(event: APIEvent) {
 // define route & lambda
 Route({
   path: "/blargle",
-  memorySize: 1024,
+  ...commonOpts,
 })(queryHandler);
-
-export const handler: APIGatewayProxyHandlerV2 = async (event, context) =>
-  new TopicCrudApi().dispatch(event, context);
